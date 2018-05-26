@@ -1,0 +1,71 @@
+.list {
+  height: 73.186813186%;
+  flex-direction: column;
+  overflow: hidden;
+  &__item {
+    position: relative;
+    height: 33.33333333%;
+    width: 128.912466844%;
+    border-bottom: 1px solid $itemBorderColor;
+    background: $itemBackground;
+    transition: margin-left 1s ease 0.2s;
+  }
+}
+
+.person {
+  &__avatar {
+    width: 21.193415637%;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .avatar {
+      &__loading-icon {
+        font-size: 5vmin;
+        color: $loadingIconColor;
+      }
+      &__image {
+        position: absolute;
+        top: center;
+        left: center;
+        width: 7vmin;
+        height: 7vmin;
+        border-radius: 50%;
+      }
+    }
+  }
+  &__info {
+    width: 45.267489711%;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &__name {
+    font-size: 3vmin;
+  }
+  &__location {
+    font-size: 1.5vmin;
+    .location__icon {
+      margin-top: 1%;
+      margin-right: 2%;
+    }
+  }
+  &__link {
+    color: $linkColor;
+    font-size: 1.8vmin;
+    font-weight: 100;
+    margin-top: 1%;
+  }
+  &__options-arrow {
+    width: 12.111111111%;
+    font-size: 6vmin;
+    align-items: center;
+    justify-content: center;
+  }
+  &__delete {
+    width: 21.427983539%;
+    background: $deleteBackground;
+    font-size: 5vmin;
+    justify-content: center;
+    align-items: center;
+    color: $deleteColor;
+  }
+}
