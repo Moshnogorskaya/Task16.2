@@ -1,7 +1,30 @@
 import $ from 'jquery';
+import { createStore } from 'redux';
 
-const SHOW_OPTIONS = 'SHOW_OPTIONS';
-const HIDE_OPTIONS = 'HIDE_OPTIONS';
+const selector = '.suggestion-1';
+const profile = $(selector);
+const arrow = $(`${selector} .person__options-arrow`);
+// const deleteButton = $(`${selector} .person__delete`);
+
+function options(state, action) {
+  switch (action.type) {
+    case 'SHOW':
+      return '-28.912466843%';
+    case 'HIDE':
+      return '0';
+    default:
+      return '0';
+  }
+}
+
+const store = createStore(options);
+
+store.subscribe(() => {
+  profile.css('margin-left', store.getState());
+});
+
+arrow.click(() => store.dispatch({ type: 'SHOW' }));
+// arrow.addEventListener('mouseleave', store.dispatch({ type: 'HIDE' }));
 //   const profile = $(selector);
 //   const arrow = $(`${selector} .person__options-arrow`);
 //   const deleteButton = $(`${selector} .person__delete`);
