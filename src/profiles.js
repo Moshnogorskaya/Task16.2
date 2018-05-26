@@ -1,10 +1,36 @@
 import $ from 'jquery';
-// import * as Observable from 'rxjs';
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/mergeMap';
-// import 'rxjs/add/operator/startWith';
-// import 'rxjs/add/operator/combineLatest';
-// import 'rxjs/add/operator/merge';
+import { createStore } from 'redux';
+
+console.log($('.list__item'));
+
+function getUsers() {
+  const users = [];
+  const randomOffset = Math.floor(Math.random() * 500);
+  const requestUsersResponse = $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
+  for (let i = 0; i < 3; i += 1) {
+    const person = requestUsersResponse[Math.floor(Math.random() * requestUsersResponse.length)];
+    const personDetails = $.getJSON(person.url);
+    users.push(personDetails);
+  }
+  return users;
+}
+
+function generateProfiles(state, action) {
+  switch (action.type) {
+    case 'REFRESH':
+      return getUsers();
+    default:
+      return state;
+  }
+}
+
+const store = createStore(generateProfiles);
+
+// store.subscribe(() => {
+//     store.getState().forEach((person, i) => {
+
+//     });
+//   });
 
 // const refreshButton = $('.widget__refresh');
 // const closeButton1 = $('.delete-button-1');
