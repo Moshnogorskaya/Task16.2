@@ -1,7 +1,7 @@
 import $ from 'jquery';
-// import * as Observable from 'rxjs';
 
-// function options(selector) {
+const SHOW_OPTIONS = 'SHOW_OPTIONS';
+const HIDE_OPTIONS = 'HIDE_OPTIONS';
 //   const profile = $(selector);
 //   const arrow = $(`${selector} .person__options-arrow`);
 //   const deleteButton = $(`${selector} .person__delete`);
