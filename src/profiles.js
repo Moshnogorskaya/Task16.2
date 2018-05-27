@@ -1,17 +1,18 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
-console.log($('.list__item'));
+const personList = $('.person');
+const refreshButton = $('.widget__refresh');
 
 function getUsers() {
   const users = [];
   const randomOffset = Math.floor(Math.random() * 500);
-  const requestUsersResponse = $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
-  for (let i = 0; i < 3; i += 1) {
-    const person = requestUsersResponse[Math.floor(Math.random() * requestUsersResponse.length)];
-    const personDetails = $.getJSON(person.url);
-    users.push(personDetails);
-  }
+  $.getJSON(`https://api.github.com/users?since=${randomOffset}`, (data) => {
+    for (let i = 0; i < 3; i += 1) {
+      const person = data[Math.floor(Math.random() * data.length)];
+      $.getJSON(`https://api.github.com/users/${person.login}`, personDetails => users.concat(personDetails));
+    }
+  });
   return users;
 }
 
@@ -24,13 +25,26 @@ function generateProfiles(state, action) {
   }
 }
 
-const store = createStore(generateProfiles);
+const storeProfiles = createStore(generateProfiles);
 
-// store.subscribe(() => {
-//     store.getState().forEach((person, i) => {
+storeProfiles.subscribe(() => {
+  storeProfiles.getState().forEach((person, i) => {
+    const name = $(personList[i]).find('.person__name');
+    const avatar = $(personList[i]).find('.avatar__image');
+    const location = $(personList[i]).find('.location__text');
+    const link = $(personList[i]).find('.person__link');
+    name.html(person.name);
+    location.html(person.location);
+    link.html(`@${person.login}`);
+    link.attr('href', person.html_url);
+    avatar.css({
+      background: `url(${person.avatar_url}) no-repeat`,
+      'background-size': 'contain',
+    });
+  });
+});
 
-//     });
-//   });
+refreshButton.click(() => storeProfiles.dispatch({ type: 'REFRESH' }));
 
 // const refreshButton = $('.widget__refresh');
 // const closeButton1 = $('.delete-button-1');

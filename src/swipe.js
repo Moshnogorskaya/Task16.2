@@ -17,16 +17,16 @@ function swipeOptions(selector) {
     }
   }
 
-  const store = createStore(options);
+  const storeSwipe = createStore(options);
 
-  store.subscribe(() => {
-    profile.css('margin-left', store.getState());
+  storeSwipe.subscribe(() => {
+    profile.css('margin-left', storeSwipe.getState());
   });
 
-  arrow.mouseenter(() => store.dispatch({ type: 'SHOW' }));
-  arrow.mouseleave(() => store.dispatch({ type: 'HIDE' }));
-  deleteButton.mouseenter(() => store.dispatch({ type: 'SHOW' }));
-  deleteButton.mouseleave(() => store.dispatch({ type: 'HIDE' }));
+  arrow.mouseenter(() => storeSwipe.dispatch({ type: 'SHOW' }));
+  arrow.mouseleave(() => storeSwipe.dispatch({ type: 'HIDE' }));
+  deleteButton.mouseenter(() => storeSwipe.dispatch({ type: 'SHOW' }));
+  deleteButton.mouseleave(() => storeSwipe.dispatch({ type: 'HIDE' }));
 }
 
 swipeOptions('.suggestion-1');
