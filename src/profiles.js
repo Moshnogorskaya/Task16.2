@@ -9,14 +9,10 @@ function getProfilesList() {
   return $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
 }
 
-function getProfile(list) {
-  const person = list[Math.floor(Math.random() * list.length)];
-  return $.getJSON(`https://api.github.com/users/${person.login}`);
-}
-
-async function blabla(list) {
+async function getProfile(list) {
   try {
-    const profile = await getProfile(list);
+    const person = list[Math.floor(Math.random() * list.length)];
+    const profile = await $.getJSON(`https://api.github.com/users/${person.login}`);
     return profile;
   } catch (err) {
     return console.log('request failed', err);
@@ -28,11 +24,10 @@ async function getUsers() {
     const users = [];
     const profiles = await getProfilesList();
     for (let i = 0; i < 3; i += 1) {
-      const profile = blabla(profiles);
-
+      const profile = getProfile(profiles);
       users.push(profile);
     }
-    console.log(users);
+    console.log(users); // array of resolved promises
     return users;
   } catch (err) {
     return console.log('request failed', err);
