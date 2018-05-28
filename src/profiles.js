@@ -18,26 +18,25 @@ function getProfile(list) {
   return request;
 }
 
-const users = [];
-const profiles = getProfilesList();
-// console.log(profiles);
-const getUse = profiles.done((data) => {
-  for (let i = 0; i < 3; i += 1) {
-    const profile = getProfile(data);
-    profile.done((data1) => {
-      users.push(data1);
-      // console.log(users);
-      return users;
-    });
-  }
-  return users;
-}).done(() => users);
+function getUsers() {
+  const users = [];
+  const profiles = getProfilesList();
+  profiles.done((data) => {
+    for (let i = 0; i < 3; i += 1) {
+      const profile = getProfile(data);
+      profile.done((data1) => {
+        users.push(data1);
+      });
+    }
+    console.log(users);
+    return users;
+  }).done(() => users);
+}
 
 function generateProfiles(state, action) {
   switch (action.type) {
     case 'REFRESH':
-      console.log(getUse);
-      return getUse;
+      return getUsers();
     default:
       return state;
   }
