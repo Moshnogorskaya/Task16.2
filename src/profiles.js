@@ -19,7 +19,7 @@ async function blabla(list) {
     const profile = await getProfile(list);
     return profile;
   } catch (err) {
-    console.log('request failed', err);
+    return console.log('request failed', err);
   }
 }
 
@@ -29,12 +29,13 @@ async function getUsers() {
     const profiles = await getProfilesList();
     for (let i = 0; i < 3; i += 1) {
       const profile = blabla(profiles);
+
       users.push(profile);
     }
     console.log(users);
     return users;
   } catch (err) {
-    console.log('request failed', err);
+    return console.log('request failed', err);
   }
 }
 
