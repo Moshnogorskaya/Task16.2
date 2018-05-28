@@ -6,31 +6,36 @@ const refreshButton = $('.widget__refresh');
 
 function getProfilesList() {
   const randomOffset = Math.floor(Math.random() * 500);
-  const request = $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
-  // console.log(request);
-  return request;
+  return $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
 }
 
 function getProfile(list) {
   const person = list[Math.floor(Math.random() * list.length)];
-  const request = $.getJSON(`https://api.github.com/users/${person.login}`);
-  // console.log(request);
-  return request;
+  return $.getJSON(`https://api.github.com/users/${person.login}`);
 }
 
-function getUsers() {
-  const users = [];
-  const profiles = getProfilesList();
-  profiles.done((data) => {
+async function blabla(list) {
+  try {
+    const profile = await getProfile(list);
+    return profile;
+  } catch (err) {
+    console.log('request failed', err);
+  }
+}
+
+async function getUsers() {
+  try {
+    const users = [];
+    const profiles = await getProfilesList();
     for (let i = 0; i < 3; i += 1) {
-      const profile = getProfile(data);
-      profile.done((data1) => {
-        users.push(data1);
-      });
+      const profile = blabla(profiles);
+      users.push(profile);
     }
     console.log(users);
     return users;
-  }).done(() => users);
+  } catch (err) {
+    console.log('request failed', err);
+  }
 }
 
 function generateProfiles(state, action) {
