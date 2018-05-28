@@ -21,20 +21,24 @@ async function getProfile(list) {
 
 async function getUsers() {
   try {
+    const promisesUsers = [];
     const users = [];
     const profiles = await getProfilesList();
     for (let i = 0; i < 3; i += 1) {
       const profile = getProfile(profiles);
-      users.push(profile);
+      promisesUsers.push(profile);
     }
-    console.log(users); // array of resolved promises
+    promisesUsers.map(promise => promise.then(result => users.push(result)));
     return users;
   } catch (err) {
     return console.log('request failed', err);
   }
 }
+console.log(getUsers());
 
-function generateProfiles(state, action) {
+const initialState = [{'name': 'Please, wait', 'location': 'Unknown', 'login': '','html_url': '', 'avatar_url': ''}, {}, {}];
+
+function generateProfiles(state = initialState, action) {
   switch (action.type) {
     case 'REFRESH':
       return getUsers();
