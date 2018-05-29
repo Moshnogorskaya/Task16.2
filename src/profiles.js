@@ -2,8 +2,6 @@ import $ from 'jquery';
 import { createStore } from 'redux';
 
 const personList = $('.person');
-// const personList = []; // optional $ to Dom
-// $.each($personList, (i, person) => personList.push(person));
 
 
 const refreshButton = $('.widget__refresh');
@@ -46,4 +44,5 @@ storeProfiles.subscribe(() => {
   });
 });
 
+storeProfiles.dispatch({ type: 'REFRESH' });
 refreshButton.click(() => storeProfiles.dispatch({ type: 'REFRESH' }));
