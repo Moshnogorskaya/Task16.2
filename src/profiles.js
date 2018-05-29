@@ -114,9 +114,9 @@ const initialState = [{
 //   }
 // }
 
-function changeState(st, d) {
+function changeState(st, array) {
   let changedState = st;
-  changedState = changedState.map(() => d);
+  changedState = changedState.map((person, i) => array[i]);
   return changedState;
 }
 
