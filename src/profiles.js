@@ -1,6 +1,10 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
+const rand = function getRandomNumberFromAmount(amount) {
+  return Math.floor(Math.random() * amount);
+};
+
 
 const refreshButton = $('.widget__refresh');
 
@@ -115,9 +119,7 @@ const initialState = [{
 // }
 
 function changeState(st, array) {
-  let changedState = st;
-  changedState = changedState.map((person, i) => array[i]);
-  return changedState;
+  return st.map((person, i) => array[i]);
 }
 
 function generateProfiles(state, action) {
@@ -125,10 +127,7 @@ function generateProfiles(state, action) {
     case 'INIT':
       return state;
     case 'REFRESH': {
-      console.log('content', action.content);
-      const newState = changeState(state, action.content);
-      console.log('newState ', newState);
-      return newState;
+      return changeState(state, action.content);
     }
     default:
       return state;
@@ -160,17 +159,15 @@ storeProfiles.subscribe(() => renderView(storeProfiles.getState()));
 storeProfiles.dispatch({ type: 'INIT' });
 
 refreshButton.click(() => {
-  const profilesRequest = $.getJSON('https://api.github.com/users');
+  const profilesRequest = $.getJSON(`https://api.github.com/users?since=${rand(500)}`);
   profilesRequest.done((profilesResponse) => {
-    const profileURL1 = profilesResponse[3].url;
-    const profileURL2 = profilesResponse[5].url;
-    const profileURL3 = profilesResponse[7].url;
-    const profileRequest1 = $.getJSON(profileURL1);
-    const profileRequest2 = $.getJSON(profileURL2);
-    const profileRequest3 = $.getJSON(profileURL3);
-
-    Promise.all([profileRequest1, profileRequest2, profileRequest3]).then((profile) => {
-      console.log('profiles', profile);
+    const promises = [];
+    for (let i = 0; i < 3; i += 1) {
+      const profileURL = profilesResponse[rand(profilesResponse.length)].url;
+      const profileRequest = $.getJSON(profileURL);
+      promises.push(profileRequest);
+    }
+    Promise.all(promises).then((profile) => {
       storeProfiles.dispatch({ type: 'REFRESH', content: profile });
     });
   });
