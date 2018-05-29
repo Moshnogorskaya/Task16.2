@@ -1,10 +1,9 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
-const $personList = $('.person');
-const personList = [];
-$.each($personList, (i, person) => personList.push(person));
-console.log(personList);
+const personList = $('.person');
+// const personList = []; // optional $ to Dom
+// $.each($personList, (i, person) => personList.push(person));
 
 
 const refreshButton = $('.widget__refresh');
@@ -31,22 +30,20 @@ function generateProfiles(state, action) {
 const storeProfiles = createStore(generateProfiles, initialState);
 
 storeProfiles.subscribe(() => {
-  console.log('getState ', storeProfiles.getState());
-  return storeProfiles.getState();
-  // storeProfiles.getState().forEach((person, i) => {
-  //   const name = $(personList[i]).find('.person__name');
-  //   const avatar = $(personList[i]).find('.avatar__image');
-  //   const location = $(personList[i]).find('.location__text');
-  //   const link = $(personList[i]).find('.person__link');
-  //   name.html(person.name);
-  //   location.html(person.location);
-  //   link.html(`@${person.login}`);
-  //   link.attr('href', person.html_url);
-  //   avatar.css({
-  //     background: `url(${person.avatar_url}) no-repeat`,
-  //     'background-size': 'contain',
-  //   });
-  // });
+  return storeProfiles.getState().forEach((person, i) => {
+    const name = $(personList[i]).find('.person__name');
+    const avatar = $(personList[i]).find('.avatar__image');
+    const location = $(personList[i]).find('.location__text');
+    const link = $(personList[i]).find('.person__link');
+    name.html(person.name);
+    location.html(person.location);
+    link.html(`@${person.login}`);
+    link.attr('href', person.html_url);
+    avatar.css({
+      background: `url(${person.avatar_url}) no-repeat`,
+      'background-size': 'contain',
+    });
+  });
 });
 
 refreshButton.click(() => storeProfiles.dispatch({ type: 'REFRESH' }));
