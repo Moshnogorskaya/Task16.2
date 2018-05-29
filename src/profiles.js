@@ -2,8 +2,6 @@ import $ from 'jquery';
 import { createStore } from 'redux';
 
 const personList = $('.person');
-
-
 const refreshButton = $('.widget__refresh');
 
 const initialState = [{
@@ -116,42 +114,11 @@ const initialState = [{
 //   }
 // }
 
-const profileRequest = $.getJSON('https://api.github.com/users/mojombo');
+const profile = $.getJSON('https://api.github.com/users/mojombo');
 
-function changeState(st) {
+function changeState(st, d) {
   let changedState = st;
-  changedState = changedState.map(() => ({
-    login: 'mojombo',
-    id: 1,
-    avatar_url: 'https://avatars0.githubusercontent.com/u/1?v=4',
-    gravatar_id: '',
-    url: 'https://api.github.com/users/mojombo',
-    html_url: 'https://github.com/mojombo',
-    followers_url: 'https://api.github.com/users/mojombo/followers',
-    following_url: 'https://api.github.com/users/mojombo/following{/other_user}',
-    gists_url: 'https://api.github.com/users/mojombo/gists{/gist_id}',
-    starred_url: 'https://api.github.com/users/mojombo/starred{/owner}{/repo}',
-    subscriptions_url: 'https://api.github.com/users/mojombo/subscriptions',
-    organizations_url: 'https://api.github.com/users/mojombo/orgs',
-    repos_url: 'https://api.github.com/users/mojombo/repos',
-    events_url: 'https://api.github.com/users/mojombo/events{/privacy}',
-    received_events_url: 'https://api.github.com/users/mojombo/received_events',
-    type: 'User',
-    site_admin: false,
-    name: 'Tom Preston-Werner',
-    company: null,
-    blog: 'http://tom.preston-werner.com',
-    location: 'San Francisco',
-    email: null,
-    hireable: null,
-    bio: null,
-    public_repos: 60,
-    public_gists: 62,
-    followers: 20965,
-    following: 11,
-    created_at: '2007-10-20T05:24:19Z',
-    updated_at: '2018-05-07T17:19:34Z',
-  }));
+  changedState = changedState.map(() => d);
   return changedState;
 }
 
@@ -165,7 +132,8 @@ function generateProfiles(state, action) {
       return newState;
     }
     case 'REFRESH_SUCCESS': {
-      const newState = changeState(state);
+      console.log('content', action.content);
+      const newState = changeState(state, action.content);
       console.log('newState ', newState);
       return newState;
     }
@@ -192,4 +160,7 @@ storeProfiles.subscribe(() => storeProfiles.getState().forEach((person, i) => {
 }));
 
 storeProfiles.dispatch({ type: 'INIT' });
-refreshButton.click(() => storeProfiles.dispatch({ type: 'REFRESH_SUCCESS' }));
+refreshButton.click(() => profile.done((data) => {
+  console.log('data', data);
+  return storeProfiles.dispatch({ type: 'REFRESH_SUCCESS', content: data });
+}));
