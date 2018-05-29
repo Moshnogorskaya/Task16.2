@@ -5,8 +5,9 @@ const rand = function getRandomNumberFromAmount(amount) {
   return Math.floor(Math.random() * amount);
 };
 
-
 const refreshButton = $('.widget__refresh');
+const deleteButton = $('.person__delete');
+deleteButton.each((i, button) => console.log(button));
 
 const initialState = [{
   login: '',
@@ -103,21 +104,6 @@ const initialState = [{
   updated_at: '',
 }];
 
-// function getProfilesList() {
-//   const randomOffset = Math.floor(Math.random() * 500);
-//   return $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
-// }
-
-// async function getProfile(list) {
-//   try {
-//     const person = list[Math.floor(Math.random() * list.length)];
-//     const profile = await $.getJSON(`https://api.github.com/users/${person.login}`);
-//     return profile;
-//   } catch (err) {
-//     return console.log('request failed', err);
-//   }
-// }
-
 function changeState(st, array) {
   return st.map((person, i) => array[i]);
 }
@@ -133,6 +119,8 @@ function generateProfiles(state, action) {
       return state;
   }
 }
+
+const storeProfiles = createStore(generateProfiles, initialState);
 
 function renderView(profiles) {
   const personList = $('.person');
@@ -152,13 +140,8 @@ function renderView(profiles) {
   });
 }
 
-const storeProfiles = createStore(generateProfiles, initialState);
 
-storeProfiles.subscribe(() => renderView(storeProfiles.getState()));
-
-storeProfiles.dispatch({ type: 'INIT' });
-
-refreshButton.click(() => {
+function refresh() {
   const profilesRequest = $.getJSON(`https://api.github.com/users?since=${rand(500)}`);
   profilesRequest.done((profilesResponse) => {
     const promises = [];
@@ -171,5 +154,15 @@ refreshButton.click(() => {
       storeProfiles.dispatch({ type: 'REFRESH', content: profile });
     });
   });
-});
+}
+
+function deletePerson() {}
+
+storeProfiles.subscribe(() => renderView(storeProfiles.getState()));
+
+// Page loaded
+storeProfiles.dispatch({ type: 'INIT' });
+refreshButton.click(() => refresh());
+
+deleteButton.click(() => deletePerson());
 
