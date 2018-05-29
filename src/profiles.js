@@ -1,8 +1,10 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
-const personList = $('.person');
-$.each(personList, (i, person) => console.log(person));
+const $personList = $('.person');
+const personList = [];
+$.each($personList, (i, person) => personList.push(person));
+console.log(personList);
 
 
 const refreshButton = $('.widget__refresh');
