@@ -36,7 +36,13 @@ async function getUsers() {
 }
 console.log(getUsers());
 
-const initialState = [{'name': 'Please, wait', 'location': 'Unknown', 'login': '','html_url': '', 'avatar_url': ''}, {}, {}];
+const initialState = [{
+  name: 'Please, wait', location: 'Unknown', login: '', html_url: '#', avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+}, {
+  name: 'Please, wait', location: 'Unknown', login: '', html_url: '#', avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+}, {
+  name: 'Please, wait', location: 'Unknown', login: '', html_url: '#', avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+}];
 
 function generateProfiles(state = initialState, action) {
   switch (action.type) {
