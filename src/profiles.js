@@ -114,8 +114,6 @@ const initialState = [{
 //   }
 // }
 
-const profile = $.getJSON('https://api.github.com/users/mojombo');
-
 function changeState(st, d) {
   let changedState = st;
   changedState = changedState.map(() => d);
@@ -165,7 +163,13 @@ const storeProfiles = createStore(generateProfiles, initialState);
 storeProfiles.subscribe(() => renderView(storeProfiles.getState()));
 
 storeProfiles.dispatch({ type: 'INIT' });
-refreshButton.click(() => profile.done((data) => {
-  console.log('data', data);
-  return storeProfiles.dispatch({ type: 'REFRESH_SUCCESS', content: data });
-}));
+
+refreshButton.click(() => {
+  const profilesRequest = $.getJSON('https://api.github.com/users');
+  profilesRequest.done((profilesResponse) => {
+    const profileURL = profilesResponse[3].url;
+    const profileRequest = $.getJSON(profileURL);
+    profileRequest.done(profile => storeProfiles.dispatch({ type: 'REFRESH_SUCCESS', content: profile }));
+  });
+});
+
