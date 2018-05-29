@@ -116,11 +116,12 @@ const initialState = [{
 //   }
 // }
 
+
 async function changeState(st) {
   try {
-    let changedState = st;
     const requestProfile = $.getJSON('https://api.github.com/users/mojombo');
     const profile = await requestProfile;
+    let changedState = st;
     console.log('first', profile);
     changedState = changedState.map(() => profile);
     console.log('second', changedState);
