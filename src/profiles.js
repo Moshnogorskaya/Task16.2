@@ -169,7 +169,7 @@ refreshButton.click(() => {
     const profileRequest2 = $.getJSON(profileURL2);
     const profileRequest3 = $.getJSON(profileURL3);
 
-    (profileRequest1, profileRequest2, profileRequest3).done((profile) => {
+    Promise.all([profileRequest1, profileRequest2, profileRequest3]).then((profile) => {
       console.log('profiles', profile);
       storeProfiles.dispatch({ type: 'REFRESH', content: profile });
     });
