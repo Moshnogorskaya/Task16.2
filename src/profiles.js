@@ -124,12 +124,7 @@ function generateProfiles(state, action) {
   switch (action.type) {
     case 'INIT':
       return state;
-    case 'REFRESH_REQUEST': {
-      const newState = changeState(state);
-      console.log('newState ', newState);
-      return newState;
-    }
-    case 'REFRESH_SUCCESS': {
+    case 'REFRESH': {
       console.log('content', action.content);
       const newState = changeState(state, action.content);
       console.log('newState ', newState);
@@ -167,9 +162,17 @@ storeProfiles.dispatch({ type: 'INIT' });
 refreshButton.click(() => {
   const profilesRequest = $.getJSON('https://api.github.com/users');
   profilesRequest.done((profilesResponse) => {
-    const profileURL = profilesResponse[3].url;
-    const profileRequest = $.getJSON(profileURL);
-    profileRequest.done(profile => storeProfiles.dispatch({ type: 'REFRESH_SUCCESS', content: profile }));
+    const profileURL1 = profilesResponse[3].url;
+    const profileURL2 = profilesResponse[5].url;
+    const profileURL3 = profilesResponse[7].url;
+    const profileRequest1 = $.getJSON(profileURL1);
+    const profileRequest2 = $.getJSON(profileURL2);
+    const profileRequest3 = $.getJSON(profileURL3);
+
+    (profileRequest1, profileRequest2, profileRequest3).done((profile) => {
+      console.log('profiles', profile);
+      storeProfiles.dispatch({ type: 'REFRESH', content: profile });
+    });
   });
 });
 
