@@ -1,62 +1,136 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
-const personList = $('.person');
-const refreshButton = $('.widget__refresh');
+const rand = function getRandomNumberFromAmount(amount) { // UTILITY
+  return Math.floor(Math.random() * amount);
+};
 
-function getProfilesList() {
-  const randomOffset = Math.floor(Math.random() * 500);
-  return $.getJSON(`https://api.github.com/users?since=${randomOffset}`);
-}
+const profileRequestURL = `https://api.github.com/users?since=${rand(500)}`;
 
-async function getProfile(list) {
-  try {
-    const person = list[Math.floor(Math.random() * list.length)];
-    const profile = await $.getJSON(`https://api.github.com/users/${person.login}`);
-    return profile;
-  } catch (err) {
-    return console.log('request failed', err);
-  }
-}
+const initialState = [ // INITIAL STATE
+  {
+    login: '',
+    id: 1,
+    avatar_url:
+      'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+    gravatar_id: '',
+    url: '#',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: 'User',
+    site_admin: false,
+    name: 'Please, wait...',
+    company: null,
+    blog: '',
+    location: 'Unknown',
+    email: null,
+    hireable: null,
+    bio: null,
+    public_repos: 60,
+    public_gists: 62,
+    followers: 20965,
+    following: 11,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    login: '',
+    id: 1,
+    avatar_url:
+      'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+    gravatar_id: '',
+    url: '#',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: 'User',
+    site_admin: false,
+    name: 'Please, wait...',
+    company: null,
+    blog: '',
+    location: 'Unknown',
+    email: null,
+    hireable: null,
+    bio: null,
+    public_repos: 60,
+    public_gists: 62,
+    followers: 20965,
+    following: 11,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    login: '',
+    id: 1,
+    avatar_url:
+      'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+    gravatar_id: '',
+    url: '#',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: 'User',
+    site_admin: false,
+    name: 'Please, wait...',
+    company: null,
+    blog: '',
+    location: 'Unknown',
+    email: null,
+    hireable: null,
+    bio: null,
+    public_repos: 60,
+    public_gists: 62,
+    followers: 20965,
+    following: 11,
+    created_at: '',
+    updated_at: '',
+  },
+];
 
-async function getUsers() {
-  try {
-    const promisesUsers = [];
-    const users = [];
-    const profiles = await getProfilesList();
-    for (let i = 0; i < 3; i += 1) {
-      const profile = getProfile(profiles);
-      promisesUsers.push(profile);
-    }
-    promisesUsers.map(promise => promise.then(result => users.push(result)));
-    return users;
-  } catch (err) {
-    return console.log('request failed', err);
-  }
-}
-console.log(getUsers());
-
-const initialState = [{
-  name: 'Please, wait', location: 'Unknown', login: '', html_url: '#', avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
-}, {
-  name: 'Please, wait', location: 'Unknown', login: '', html_url: '#', avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
-}, {
-  name: 'Please, wait', location: 'Unknown', login: '', html_url: '#', avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
-}];
-
-function generateProfiles(state = initialState, action) {
+function generateProfiles(state, action) { // REDUCER
   switch (action.type) {
-    case 'REFRESH':
-      return getUsers();
+    case 'INIT':
+      return state;
+    case 'REFRESH': {
+      return state.map((person, i) => action.content[i]);
+    }
+    case 'DELETE': {
+      const newState = state;
+      newState[action.content_index] = action.content;
+      return newState;
+    }
     default:
       return state;
   }
 }
 
-const storeProfiles = createStore(generateProfiles);
+const storeProfiles = createStore(generateProfiles, initialState); // STORE
 
-storeProfiles.subscribe(() => {
-  storeProfiles.getState().forEach((person, i) => {
+function renderViewAll(profiles) { // UTILITY
+  const personList = $('.person');
+  profiles.forEach((person, i) => {
     const name = $(personList[i]).find('.person__name');
     const avatar = $(personList[i]).find('.avatar__image');
     const location = $(personList[i]).find('.location__text');
@@ -70,6 +144,49 @@ storeProfiles.subscribe(() => {
       'background-size': 'contain',
     });
   });
-});
+}
 
-refreshButton.click(() => storeProfiles.dispatch({ type: 'REFRESH' }));
+function refresh() { // BOUND ACTION CREATOR
+  const profilesRequest = $.getJSON(profileRequestURL);
+  profilesRequest.done((profilesResponse) => {
+    const promises = [];
+    for (let i = 0; i < 3; i += 1) {
+      const profileURL = profilesResponse[rand(profilesResponse.length)].url;
+      const profileRequest = $.getJSON(profileURL);
+      promises.push(profileRequest);
+    }
+    Promise.all(promises).then((profile) => {
+      storeProfiles.dispatch({ type: 'REFRESH', content: profile });
+    });
+  });
+}
+
+function deletePerson(index) { // BOUND ACTION CREATOR
+  const profilesRequest = $.getJSON(profileRequestURL);
+  profilesRequest.done((profilesResponse) => {
+    const profileURL = profilesResponse[rand(profilesResponse.length)].url;
+    const profileRequest = $.getJSON(profileURL);
+    profileRequest.done((profile) => {
+      storeProfiles.dispatch({
+        type: 'DELETE',
+        content: profile,
+        content_index: index,
+      });
+    });
+  });
+
+  storeProfiles.dispatch({ type: 'DELETE' });
+}
+
+storeProfiles.subscribe(() => renderViewAll(storeProfiles.getState())); // REGISTER LISTENER
+
+// Page loaded
+storeProfiles.dispatch({ type: 'INIT' });
+
+const refreshButton = $('.widget__refresh');
+refreshButton.click(() => refresh()); // DIRECT CALL OF BOUND ACTION CREATOR
+
+const deleteButton = $('.person__delete');
+deleteButton.each((i, button) => {
+  $(button).click(() => deletePerson(i)); // DIRECT CALL OF BOUND ACTION CREATOR
+});
