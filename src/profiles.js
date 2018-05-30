@@ -1,14 +1,13 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
-const rand = function getRandomNumberFromAmount(amount) {
+const rand = function getRandomNumberFromAmount(amount) { // UTILITY
   return Math.floor(Math.random() * amount);
 };
 
-const refreshButton = $('.widget__refresh');
-const deleteButton = $('.person__delete');
+const profileRequestURL = `https://api.github.com/users?since=${rand(500)}`;
 
-const initialState = [
+const initialState = [ // INITIAL STATE
   {
     login: '',
     id: 1,
@@ -110,7 +109,7 @@ const initialState = [
   },
 ];
 
-function generateProfiles(state, action) {
+function generateProfiles(state, action) { // REDUCER
   switch (action.type) {
     case 'INIT':
       return state;
@@ -127,9 +126,9 @@ function generateProfiles(state, action) {
   }
 }
 
-const storeProfiles = createStore(generateProfiles, initialState);
+const storeProfiles = createStore(generateProfiles, initialState); // STORE
 
-function renderViewAll(profiles) {
+function renderViewAll(profiles) { // UTILITY
   const personList = $('.person');
   profiles.forEach((person, i) => {
     const name = $(personList[i]).find('.person__name');
@@ -147,8 +146,8 @@ function renderViewAll(profiles) {
   });
 }
 
-function refresh() {
-  const profilesRequest = $.getJSON(`https://api.github.com/users?since=${rand(500)}`);
+function refresh() { // BOUND ACTION CREATOR
+  const profilesRequest = $.getJSON(profileRequestURL);
   profilesRequest.done((profilesResponse) => {
     const promises = [];
     for (let i = 0; i < 3; i += 1) {
@@ -162,8 +161,8 @@ function refresh() {
   });
 }
 
-function deletePerson(index) {
-  const profilesRequest = $.getJSON(`https://api.github.com/users?since=${rand(500)}`);
+function deletePerson(index) { // BOUND ACTION CREATOR
+  const profilesRequest = $.getJSON(profileRequestURL);
   profilesRequest.done((profilesResponse) => {
     const profileURL = profilesResponse[rand(profilesResponse.length)].url;
     const profileRequest = $.getJSON(profileURL);
@@ -179,12 +178,15 @@ function deletePerson(index) {
   storeProfiles.dispatch({ type: 'DELETE' });
 }
 
-storeProfiles.subscribe(() => renderViewAll(storeProfiles.getState()));
+storeProfiles.subscribe(() => renderViewAll(storeProfiles.getState())); // REGISTER LISTENER
 
 // Page loaded
 storeProfiles.dispatch({ type: 'INIT' });
-refreshButton.click(() => refresh());
 
+const refreshButton = $('.widget__refresh');
+refreshButton.click(() => refresh()); // DIRECT CALL OF BOUND ACTION CREATOR
+
+const deleteButton = $('.person__delete');
 deleteButton.each((i, button) => {
-  $(button).click(() => deletePerson(i));
+  $(button).click(() => deletePerson(i)); // DIRECT CALL OF BOUND ACTION CREATOR
 });
