@@ -8,105 +8,107 @@ const rand = function getRandomNumberFromAmount(amount) {
 const refreshButton = $('.widget__refresh');
 const deleteButton = $('.person__delete');
 
-const initialState = [{
-  login: '',
-  id: 1,
-  avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
-  gravatar_id: '',
-  url: '#',
-  html_url: '',
-  followers_url: '',
-  following_url: '',
-  gists_url: '',
-  starred_url: '',
-  subscriptions_url: '',
-  organizations_url: '',
-  repos_url: '',
-  events_url: '',
-  received_events_url: '',
-  type: 'User',
-  site_admin: false,
-  name: 'Please, wait...',
-  company: null,
-  blog: '',
-  location: 'Unknown',
-  email: null,
-  hireable: null,
-  bio: null,
-  public_repos: 60,
-  public_gists: 62,
-  followers: 20965,
-  following: 11,
-  created_at: '',
-  updated_at: '',
-}, {
-  login: '',
-  id: 1,
-  avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
-  gravatar_id: '',
-  url: '#',
-  html_url: '',
-  followers_url: '',
-  following_url: '',
-  gists_url: '',
-  starred_url: '',
-  subscriptions_url: '',
-  organizations_url: '',
-  repos_url: '',
-  events_url: '',
-  received_events_url: '',
-  type: 'User',
-  site_admin: false,
-  name: 'Please, wait...',
-  company: null,
-  blog: '',
-  location: 'Unknown',
-  email: null,
-  hireable: null,
-  bio: null,
-  public_repos: 60,
-  public_gists: 62,
-  followers: 20965,
-  following: 11,
-  created_at: '',
-  updated_at: '',
-}, {
-  login: '',
-  id: 1,
-  avatar_url: 'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
-  gravatar_id: '',
-  url: '#',
-  html_url: '',
-  followers_url: '',
-  following_url: '',
-  gists_url: '',
-  starred_url: '',
-  subscriptions_url: '',
-  organizations_url: '',
-  repos_url: '',
-  events_url: '',
-  received_events_url: '',
-  type: 'User',
-  site_admin: false,
-  name: 'Please, wait...',
-  company: null,
-  blog: '',
-  location: 'Unknown',
-  email: null,
-  hireable: null,
-  bio: null,
-  public_repos: 60,
-  public_gists: 62,
-  followers: 20965,
-  following: 11,
-  created_at: '',
-  updated_at: '',
-}];
-
-// function deleteProfile (state, index) {
-// let newState = state;
-// newState[index] =
-// }
+const initialState = [
+  {
+    login: '',
+    id: 1,
+    avatar_url:
+      'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+    gravatar_id: '',
+    url: '#',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: 'User',
+    site_admin: false,
+    name: 'Please, wait...',
+    company: null,
+    blog: '',
+    location: 'Unknown',
+    email: null,
+    hireable: null,
+    bio: null,
+    public_repos: 60,
+    public_gists: 62,
+    followers: 20965,
+    following: 11,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    login: '',
+    id: 1,
+    avatar_url:
+      'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+    gravatar_id: '',
+    url: '#',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: 'User',
+    site_admin: false,
+    name: 'Please, wait...',
+    company: null,
+    blog: '',
+    location: 'Unknown',
+    email: null,
+    hireable: null,
+    bio: null,
+    public_repos: 60,
+    public_gists: 62,
+    followers: 20965,
+    following: 11,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    login: '',
+    id: 1,
+    avatar_url:
+      'https://cdn.iconscout.com/public/images/icon/premium/png-512/round-circle-loader-process-loading-load-397c0a2c94fc37c5-512x512.png',
+    gravatar_id: '',
+    url: '#',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: 'User',
+    site_admin: false,
+    name: 'Please, wait...',
+    company: null,
+    blog: '',
+    location: 'Unknown',
+    email: null,
+    hireable: null,
+    bio: null,
+    public_repos: 60,
+    public_gists: 62,
+    followers: 20965,
+    following: 11,
+    created_at: '',
+    updated_at: '',
+  },
+];
 
 function generateProfiles(state, action) {
   switch (action.type) {
@@ -116,7 +118,9 @@ function generateProfiles(state, action) {
       return state.map((person, i) => action.content[i]);
     }
     case 'DELETE': {
-      return initialState;
+      const newState = state;
+      newState[action.content_index] = action.content;
+      return newState;
     }
     default:
       return state;
@@ -143,9 +147,6 @@ function renderViewAll(profiles) {
   });
 }
 
-function renderViewOne(profile) {}
-
-
 function refresh() {
   const profilesRequest = $.getJSON(`https://api.github.com/users?since=${rand(500)}`);
   profilesRequest.done((profilesResponse) => {
@@ -161,7 +162,20 @@ function refresh() {
   });
 }
 
-function deletePerson() {
+function deletePerson(index) {
+  const profilesRequest = $.getJSON(`https://api.github.com/users?since=${rand(500)}`);
+  profilesRequest.done((profilesResponse) => {
+    const profileURL = profilesResponse[rand(profilesResponse.length)].url;
+    const profileRequest = $.getJSON(profileURL);
+    profileRequest.done((profile) => {
+      storeProfiles.dispatch({
+        type: 'DELETE',
+        content: profile,
+        content_index: index,
+      });
+    });
+  });
+
   storeProfiles.dispatch({ type: 'DELETE' });
 }
 
@@ -172,7 +186,5 @@ storeProfiles.dispatch({ type: 'INIT' });
 refreshButton.click(() => refresh());
 
 deleteButton.each((i, button) => {
-  $(button).click(() => {
-    return storeProfiles.dispatch({ type: 'DELETE' });
-  });
+  $(button).click(() => deletePerson(i));
 });
