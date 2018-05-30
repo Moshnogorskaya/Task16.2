@@ -1,10 +1,9 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
-function swipeOptions(selector) {
-  const profile = $(selector);
-  const arrow = $(`${selector} .person__options-arrow`);
-  const deleteButton = $(`${selector} .person__delete`);
+function swipeOptions(element) {
+  const arrow = $(element).find('.person__options-arrow');
+  const deleteButton = $(element).find('.person__delete');
 
   function options(state, action) {
     switch (action.type) {
@@ -20,7 +19,7 @@ function swipeOptions(selector) {
   const storeSwipe = createStore(options);
 
   storeSwipe.subscribe(() => {
-    profile.css('margin-left', storeSwipe.getState());
+    $(element).css('margin-left', storeSwipe.getState());
   });
 
   arrow.mouseenter(() => storeSwipe.dispatch({ type: 'SHOW' }));
@@ -29,6 +28,5 @@ function swipeOptions(selector) {
   deleteButton.mouseleave(() => storeSwipe.dispatch({ type: 'HIDE' }));
 }
 
-swipeOptions('.suggestion-1');
-swipeOptions('.suggestion-2');
-swipeOptions('.suggestion-3');
+const profiles = $('.person');
+profiles.each((i, profile) => swipeOptions(profile));
