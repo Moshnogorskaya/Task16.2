@@ -7,7 +7,6 @@ const rand = function getRandomNumberFromAmount(amount) {
 
 const refreshButton = $('.widget__refresh');
 const deleteButton = $('.person__delete');
-deleteButton.each((i, button) => console.log(button));
 
 const initialState = [{
   login: '',
@@ -104,6 +103,11 @@ const initialState = [{
   updated_at: '',
 }];
 
+// function deleteProfile (state, index) {
+// let newState = state;
+// newState[index] =
+// }
+
 function generateProfiles(state, action) {
   switch (action.type) {
     case 'INIT':
@@ -121,7 +125,7 @@ function generateProfiles(state, action) {
 
 const storeProfiles = createStore(generateProfiles, initialState);
 
-function renderView(profiles) {
+function renderViewAll(profiles) {
   const personList = $('.person');
   profiles.forEach((person, i) => {
     const name = $(personList[i]).find('.person__name');
@@ -138,6 +142,8 @@ function renderView(profiles) {
     });
   });
 }
+
+function renderViewOne(profile) {}
 
 
 function refresh() {
@@ -159,11 +165,14 @@ function deletePerson() {
   storeProfiles.dispatch({ type: 'DELETE' });
 }
 
-storeProfiles.subscribe(() => renderView(storeProfiles.getState()));
+storeProfiles.subscribe(() => renderViewAll(storeProfiles.getState()));
 
 // Page loaded
 storeProfiles.dispatch({ type: 'INIT' });
 refreshButton.click(() => refresh());
 
-deleteButton.click(() => deletePerson());
-
+deleteButton.each((i, button) => {
+  $(button).click(() => {
+    return storeProfiles.dispatch({ type: 'DELETE' });
+  });
+});
