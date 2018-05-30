@@ -104,16 +104,15 @@ const initialState = [{
   updated_at: '',
 }];
 
-function changeState(st, array) {
-  return st.map((person, i) => array[i]);
-}
-
 function generateProfiles(state, action) {
   switch (action.type) {
     case 'INIT':
       return state;
     case 'REFRESH': {
-      return changeState(state, action.content);
+      return state.map((person, i) => action.content[i]);
+    }
+    case 'DELETE': {
+      return initialState;
     }
     default:
       return state;
@@ -156,7 +155,9 @@ function refresh() {
   });
 }
 
-function deletePerson() {}
+function deletePerson() {
+  storeProfiles.dispatch({ type: 'DELETE' });
+}
 
 storeProfiles.subscribe(() => renderView(storeProfiles.getState()));
 
